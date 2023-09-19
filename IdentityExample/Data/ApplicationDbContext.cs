@@ -7,7 +7,9 @@ namespace IdentityExample.Data
 {
     public class ApplicationDbContext: IdentityDbContext<IdentityUser>
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions options) : base(options) 
+        {
+        }
 
         // Táblák
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
