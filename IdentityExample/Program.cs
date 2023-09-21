@@ -1,6 +1,7 @@
 using Azure.Identity;
 using IdentityExample.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
@@ -8,10 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//builder.Services.AddIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,10 +38,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapRazorPages();
 
 
 using (var scope = app.Services.CreateScope())
@@ -45,7 +54,7 @@ using (var scope = app.Services.CreateScope())
         if (await _roleManager.RoleExistsAsync(roleName))
         {
             Console.WriteLine("**********************************************");
-            Console.WriteLine($"*** EXISTING ROLE: {roleName.ToString()}");
+            Console.WriteLine($"*** EXISTING ROLE: {roleName}");
             Console.WriteLine("**********************************************");
         }
         else
@@ -55,29 +64,30 @@ using (var scope = app.Services.CreateScope())
             Console.WriteLine("**********************************************");
             await _roleManager.CreateAsync(new IdentityRole(roleName));
         }
-
-        var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-        string email = "admin@admin";
-        string password = "Jelszó1";
-        if (await _userManager.FindByEmailAsync(email) == null)
+    }
+    var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    string email = "admin@admin";
+    string password = "Jelszï¿½1";
+    if (await _userManager.FindByEmailAsync(email) == null)
+    {
+        Console.WriteLine("**********************************************");
+        Console.WriteLine($"Nincs ilyen email-Å± user: {email}");
+        Console.WriteLine("**********************************************");
+        var admin = new IdentityUser()
         {
-            Console.WriteLine("**********************************************");
-            Console.WriteLine($"Nincs ilyen email-û user: {email}");
-            Console.WriteLine("**********************************************");
-            var admin = new IdentityUser()
-            {
-                UserName = email,
-                Email = email,
-                EmailConfirmed = true
-            };
-            await _userManager.CreateAsync(admin, password);
-            await _userManager.AddToRoleAsync(admin, "Admin");
-        } else
-        {
-            Console.WriteLine("**********************************************");
-            Console.WriteLine($"Van ilyen email-û user: {email}");
-            Console.WriteLine("**********************************************");
-        }
+            UserName = email,
+            Email = email,
+            EmailConfirmed = true
+        };
+        await _userManager.CreateAsync(admin, password);
+        await _userManager.AddToRoleAsync(admin, "Admin");
+    }
+    else
+    {
+        Console.WriteLine("**********************************************");
+        Console.WriteLine($"Van ilyen email-ï¿½ user: {email}");
+        Console.WriteLine("**********************************************");
     }
 }
+
 app.Run();
