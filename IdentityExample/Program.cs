@@ -73,7 +73,8 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("**********************************************");
         Console.WriteLine($"Nincs ilyen email-ű user: {email}");
         Console.WriteLine("**********************************************");
-        var admin = new IdentityUser()
+        //var admin = new IdentityUser()
+        var admin = new IdentityExample.Models.ApplicationUser()
         {
             UserName = email,
             Email = email,

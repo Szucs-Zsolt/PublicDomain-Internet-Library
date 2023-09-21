@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ApplicationUser>
+<h1>Felhasználók listája</h1>
+
+<table class="table table-striped border">
+    <thead class="table-secondary">
+        <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.RoleName</td>
+                <td></td>
+            </tr>
+        }
+    </tbody>
+</table>
