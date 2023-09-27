@@ -109,12 +109,6 @@ namespace PublicDomainInternetLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
-                Console.WriteLine("****************************************************");
-                Console.WriteLine($"model.UserEmail: {model.UserEmail}");
-                Console.WriteLine($"model.NewPassword: {model.NewPassword}");
-                Console.WriteLine("****************************************************");
-
-
                 var user = await _userManager.FindByEmailAsync(model.UserEmail);
                 if (user == null)
                 {
@@ -144,12 +138,11 @@ namespace PublicDomainInternetLibrary.Controllers
                 }
 
                 // ModelState.IsValid, és result is OK
-
+                TempData["Success"] = $"{model.UserEmail} jelszava megváltoztatva.";
                 return RedirectToAction("Index", "User");
             }
 
             // ModelState nem volt valid
-            TempData["Success"] = $"{model.UserEmail} jelszava megváltoztatva.";
             return View(model);
         }
 
