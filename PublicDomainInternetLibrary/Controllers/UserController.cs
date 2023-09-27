@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using PublicDomainInternetLibrary.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PublicDomainInternetLibrary.Controllers
 {
@@ -87,8 +89,69 @@ namespace PublicDomainInternetLibrary.Controllers
                 await _userManager.AddToRoleAsync(user, "Librarian");
             }
 
-
             return RedirectToAction("Index");
         }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult ChangeUserPassword(string email)
+        {
+            ChangeUserPasswordViewModel model = new ChangeUserPasswordViewModel()
+            {
+                UserEmail = email
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ChangeUserPassword(ChangeUserPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Console.WriteLine("****************************************************");
+                Console.WriteLine($"model.UserEmail: {model.UserEmail}");
+                Console.WriteLine($"model.NewPassword: {model.NewPassword}");
+                Console.WriteLine("****************************************************");
+
+
+                var user = await _userManager.FindByEmailAsync(model.UserEmail);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Nem találom a felhasználót az adatbázisban");
+                    return View(model);
+                }
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, token,
+                    model.NewPassword);
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        if (error.Description.Contains("Passwords must"))
+                        {
+                            ModelState.AddModelError("NewPassword",
+                                "A jelszó legalább 6 karakter hosszú legyen, tartalmazzon kis és nagybetűt, számot és speciális karaktert is.");
+                        }
+                        else
+                        {
+                            // Általános hibaleírás, nem egy adott property-hez tartozik
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        return View(model);
+                    }
+                }
+
+                // ModelState.IsValid, és result is OK
+
+                return RedirectToAction("Index", "User");
+            }
+
+            // ModelState nem volt valid
+            TempData["Success"] = $"{model.UserEmail} jelszava megváltoztatva.";
+            return View(model);
+        }
+
     }
 }

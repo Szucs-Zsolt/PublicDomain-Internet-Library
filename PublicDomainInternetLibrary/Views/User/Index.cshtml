@@ -18,6 +18,10 @@
                         <a asp-controller="User" asp-action="ChangeLibrarianRoleStatus"
                            asp-route-email="@user.Email"
                            class="btn btn-sm btn-danger">Könyvtárosi jog elvétele</a>
+
+                        <a asp-controller="User" asp-action="ChangeUserPassword"
+                           asp-route-email="@user.Email"
+                           class="btn btn-sm btn-warning">Jelszó megváltoztatása</a>
                     }
                 </td>
             </tr>
@@ -43,11 +47,15 @@
                     @if (User.IsInRole("Admin"))
                     {
                         <a asp-controller="User" asp-action="ChangeLibrarianRoleStatus"
-                        asp-route-email="@user.Email"
-                        class="btn btn-sm btn-success">Könyvtárosi jog megadása</a>
+                           asp-route-email="@user.Email"
+                           class="btn btn-sm btn-success">Könyvtárosi jog megadása</a>
+
+                        <a asp-controller="User" asp-action="ChangeUserPassword"
+                           asp-route-email="@user.Email"
+                           class="btn btn-sm btn-warning">Jelszó megváltoztatása</a>
                     }
 
-            </td>
+                </td>
             </tr>
         }
     </tbody>
