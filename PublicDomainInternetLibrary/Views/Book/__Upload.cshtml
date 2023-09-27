@@ -1,0 +1,28 @@
+﻿@model Book
+<h1>Könyv feltöltése</h1>
+
+
+    <form method="post" enctype="multipart/form-data">
+        <h2>A feltöltendő könyv adatai</h2>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Author" class="form-control" />
+            <label asp-for="Author" class="form-label"></label>
+            <span asp-validation-for="Author" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Title" class="form-control" />
+            <label asp-for="Title" class="form-label"></label>
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Feltöltendő könyv kiválasztása</label>
+            <input type="file" name="file" class="form-control border-0 shadow"/>
+            <span asp-validation-for="DownloadLink" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="offset-8 col-4 btn btn-lg btn-primary">Feltöltés</button>
+    </form>

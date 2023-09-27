@@ -1,0 +1,54 @@
+﻿@model UserIndexViewModel
+
+<table class="table table-striped border">
+    <thead class="table-warning">
+        <tr>
+            <th>Könyvtárosok listája</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.LibrarianList)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td class="text-end">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="User" asp-action="ChangeLibrarianRoleStatus"
+                           asp-route-email="@user.Email"
+                           class="btn btn-sm btn-danger">Könyvtárosi jog elvétele</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+
+<table class="table table-striped border">
+    <thead class="table-primary">
+        <tr>
+            <th>Felhasználók listája</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.UserList)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td class="text-end">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="User" asp-action="ChangeLibrarianRoleStatus"
+                        asp-route-email="@user.Email"
+                        class="btn btn-sm btn-success">Könyvtárosi jog megadása</a>
+                    }
+
+            </td>
+            </tr>
+        }
+    </tbody>
+</table>

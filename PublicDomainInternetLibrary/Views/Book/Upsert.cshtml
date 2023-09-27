@@ -1,0 +1,52 @@
+﻿@model BookUpsertViewModel
+@if (Model.IsNewBook)
+{
+    <h1>Új könyv feltöltése</h1>
+}
+else
+{
+    <h1>Már feltöltött könyv szerkesztése</h1>
+}
+
+<div class="row">
+    <form method="post" enctype="multipart/form-data">
+        <h2>A könyv adatai</h2>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Book.Id" hidden />
+        <input asp-for="Book.DownloadLink" hidden />
+        <input asp-for="IsNewBook" hidden />
+
+        <div class="form-floating mb-3">
+            <input asp-for="Book.Author" class="form-control" />
+            <label asp-for="Book.Author" class="form-label"></label>
+            <span asp-validation-for="Book.Author" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Book.Title" class="form-control" />
+            <label asp-for="Book.Title" class="form-label"></label>
+            <span asp-validation-for="Book.Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            @if (string.IsNullOrEmpty(Model.Book.DownloadLink))
+            {
+                <label class="form-label">Könyv feltöltése</label>
+            }
+            else
+            {
+                <label class="form-label">A már feltöltött könyv lecserélése erre</label>
+            }
+            <input type="file" name="fileToUpload" class="form-control border-0 shadow" />
+            <span asp-validation-for="Book.DownloadLink" class="text-danger"></span>
+        </div>
+
+        @if (Model.IsNewBook)
+        {
+            <button type="submit" class="offset-8 col-4 btn btn-lg btn-primary">Feltöltés</button>
+        } else
+        {
+            <button type="submit" class="offset-8 col-4 btn btn-lg btn-primary">Módosítás</button>
+        }
+    </form>
+</div>
