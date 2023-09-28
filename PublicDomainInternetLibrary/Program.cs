@@ -38,43 +38,32 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
 app.MapControllerRoute(
     name: "default",
-// Módosítva! pattern: "{controller=Home}/{action=Index}/{id?}");
+// Módosítva
     pattern: "{controller=Book}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-
+// Szükséges role-ok + admin hozzáadása, ha hiányozna
 using (var scope = app.Services.CreateScope())
 {
+    // Hiányzó role    
     var _roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var roleNames = new[] { "Admin", "Librarian", "User" };
     foreach (var roleName in roleNames)
     {
-        if (await _roleManager.RoleExistsAsync(roleName))
+        if (!await _roleManager.RoleExistsAsync(roleName))
         {
-            Console.WriteLine("**********************************************");
-            Console.WriteLine($"*** EXISTING ROLE: {roleName}");
-            Console.WriteLine("**********************************************");
-        }
-        else
-        {
-            Console.WriteLine("**********************************************");
-            Console.WriteLine($"*** MISSING ROLE: {roleName.ToString()}");
-            Console.WriteLine("**********************************************");
             await _roleManager.CreateAsync(new IdentityRole(roleName));
         }
     }
+
+    // Hiányzó admin
     var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     string email = "admin@admin";
     string password = "Jelszó1";
     if (await _userManager.FindByEmailAsync(email) == null)
     {
-        Console.WriteLine("**********************************************");
-        Console.WriteLine($"Nincs ilyen email-ű user: {email}");
-        Console.WriteLine("**********************************************");
-        //var admin = new IdentityUser()
         var admin = new PublicDomainInternetLibrary.Models.ApplicationUser()
         {
             UserName = email,
@@ -83,12 +72,6 @@ using (var scope = app.Services.CreateScope())
         };
         await _userManager.CreateAsync(admin, password);
         await _userManager.AddToRoleAsync(admin, "Admin");
-    }
-    else
-    {
-        Console.WriteLine("**********************************************");
-        Console.WriteLine($"Van ilyen email-� user: {email}");
-        Console.WriteLine("**********************************************");
     }
 }
 

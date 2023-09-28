@@ -33,7 +33,7 @@ namespace PublicDomainInternetLibrary.Controllers
             }
             else
             {
-                // már létező könyv (sikerült az adatbáziból az adatait betölteni?)
+                // már létező könyv (sikerült az adatbázisból az adatait betölteni?)
                 var bookFromDb = _db.Books.FirstOrDefault(x => x.Id == bookId);
                 if (bookFromDb != null)
                 {
@@ -72,7 +72,7 @@ namespace PublicDomainInternetLibrary.Controllers
                 {
                     string directoryPath = Path.Combine(_environment.WebRootPath, "books");
 
-                    // Törölni kell a régit, mivel a file kiterjesztése lehet, hogy nem ugyanaz
+                    // Törölni kell a régit, mivel a file kiterjesztése lehet, hogy nem ugyanaz lesz
                     if (!string.IsNullOrEmpty(model.Book.DownloadLink))
                     {
                         string oldFilePath = Path.Combine(directoryPath, model.Book.DownloadLink);
@@ -92,12 +92,6 @@ namespace PublicDomainInternetLibrary.Controllers
                     }
                     // Filenév módosítása a metaadatokban
                     model.Book.DownloadLink = newFileName;
-
-                    Console.WriteLine("********************************************");
-                    Console.WriteLine($"directoryPath: {directoryPath}");
-                    Console.WriteLine($"newFileName: {newFileName}");
-                    Console.WriteLine($"newFilePath: {newFilePath}");
-                    Console.WriteLine("********************************************");
                 }
 
                 // Metaadatok módosítása az adatbázisban is                
@@ -135,8 +129,6 @@ namespace PublicDomainInternetLibrary.Controllers
                 .OrderBy(x => x.Author)
                 .Take(100)
                 .ToList();
-            //ViewBag.SuccessMessage = "EZ az üzenet átmegy?";
-            //TempData["Success"] = "TEMPDATA üzenet";
             return View(viewModel);
         }
 
@@ -167,7 +159,6 @@ namespace PublicDomainInternetLibrary.Controllers
                 if (System.IO.File.Exists(fullPath))
                 {
                     System.IO.File.Delete(fullPath);
-
                 }
                 // Metaadatok törlése
                 _db.Books.Remove(book);

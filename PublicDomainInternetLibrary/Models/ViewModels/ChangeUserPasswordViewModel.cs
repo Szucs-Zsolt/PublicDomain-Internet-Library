@@ -19,6 +19,7 @@ namespace PublicDomainInternetLibrary.Models.ViewModels
         public string ConfirmPassword { get; set; }
 
         [ValidateNever]
+        [Display(Name = "Email cím")]
         public string UserEmail { get; set; }
     }
 }

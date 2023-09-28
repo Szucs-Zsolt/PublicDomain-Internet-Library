@@ -1,6 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @model BookIndexViewModel
 @inject SignInManager<IdentityUser> signInManager
+
+@{
+
+    ViewData["Title"] = "Könyvek listája";
+}
 @if (@TempData["Success"] != null)
 {
     <div class="alert alert-success alert-dismissible" role="alert">
@@ -13,7 +18,8 @@
     @if (signInManager.IsSignedIn(User))
     {
         <h1>Könyv letöltése</h1>
-    } else 
+    }
+    else
     {
         <h1 class="text-danger border border-0 border-bottom border-danger">Könyvek letöltéséhez kérlek jelentkezz be!</h1>
     }
@@ -32,7 +38,6 @@
         <button type="submit" class="btn btn-primary offset-9 col-3 mt-1">Keresés</button>
     </form>
 </div>
-
 
 <div class="row">
     <h3 class="p-0 mt-3">Első (max. 100) találat</h3>
@@ -60,19 +65,21 @@
                         <td class="col-4">@book.Author</td>
                         <td class="col-5">@book.Title</td>
                         <td class="form-floating text-center">
-                            @if (signInManager.IsSignedIn(User)) {
-                            <a asp-controller="Book" asp-action="Download" asp-route-id="@book.Id"
-                                class="btn btn-sm btn-primary">Letöltés</a>
-                            } else
+                            @if (signInManager.IsSignedIn(User))
+                            {
+                                <a asp-controller="Book" asp-action="Download" asp-route-id="@book.Id"
+                                   class="btn btn-sm btn-primary">Letöltés</a>
+                            }
+                            else
                             {
                                 <a class="btn btn-success btn-sm" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
                             }
                             @if (User.IsInRole("Admin") || User.IsInRole("Librarian"))
                             {
-                               <a asp-controller="Book" asp-action="Upsert" 
-                                asp-route-bookId="@book.Id"
-                                class="btn btn-sm btn-warning">Módosítás</a>
-                               <a asp-controller="Book" asp-action="Delete" asp-route-bookId="@book.Id"
+                                <a asp-controller="Book" asp-action="Upsert"
+                                   asp-route-bookId="@book.Id"
+                                   class="btn btn-sm btn-warning">Módosítás</a>
+                                <a asp-controller="Book" asp-action="Delete" asp-route-bookId="@book.Id"
                                    onclick="return confirm('Biztos, hogy törölni akarja?')"
                                    class="btn btn-sm btn-danger">Törlés</a>
                             }
@@ -83,16 +90,3 @@
         </tbody>
     </table>
 </div>
-
-
-
-<!--
-<h2>Keresés szerző, vagy cím szerint</h2>
-<form method="post" class="row">
-    <div class="form-floating md-3 p-0">
-        <input name="authorOrTitle" class="form-control" />
-        <label class="form-label md-4">Könyv, vagy szerző neve</label>
-    </div>
-    <button type="submit" class="btn btn-primary offset-9 col-3 mt-1">Keresés</button>
-</form>
--->

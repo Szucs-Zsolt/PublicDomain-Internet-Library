@@ -1,12 +1,13 @@
 ﻿@model BookUpsertViewModel
 @if (Model.IsNewBook)
 {
-    <h1>Új könyv feltöltése</h1>
+    ViewData["Title"] = "Új könyv feltöltése";
 }
 else
 {
-    <h1>Már feltöltött könyv szerkesztése</h1>
+    ViewData["Title"] = "Már feltöltött könyv szerkesztése";
 }
+<h1>@ViewData["Title"]</h1>
 
 <div class="row">
     <form method="post" enctype="multipart/form-data">

@@ -8,8 +8,5 @@ namespace PublicDomainInternetLibrary.Models
     {
         [Required]
         public string Name { get; set; }
-
-        [NotMapped]
-        public string RoleName { get; set; }
     }
 }

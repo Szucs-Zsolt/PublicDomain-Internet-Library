@@ -12,7 +12,7 @@ using PublicDomainInternetLibrary.Data;
 namespace PublicDomainInternetLibrary.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230927065720_FirstMigration")]
+    [Migration("20230928072811_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />

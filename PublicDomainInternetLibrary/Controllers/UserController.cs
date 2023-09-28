@@ -19,8 +19,6 @@ namespace PublicDomainInternetLibrary.Controllers
             _userManager = userManager; 
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -43,31 +41,8 @@ namespace PublicDomainInternetLibrary.Controllers
             viewModel.LibrarianList = viewModel.LibrarianList.OrderBy(x => x.Email).ToList();
             viewModel.UserList = viewModel.UserList.OrderBy(x => x.Email).ToList();
             return View(viewModel);
-/*
-            // AspNet utáni rész: AspNetRoles -> .Roles
-            var users = _db.ApplicationUsers.ToList();  // (user) Id
-            var roles = _db.Roles.ToList();             // (role) Id + Name
-            var userRoles = _db.UserRoles.ToList();     // UserId + RoleId (!)
-
-            foreach(var user in users)
-            {
-                var userFirstRole = userRoles.FirstOrDefault(u => u.UserId == user.Id);
-                if (userFirstRole == null)
-                {
-                    user.RoleName = "nincs";
-                } else
-                {
-                    var role = roles.FirstOrDefault(u => u.Id == userFirstRole.RoleId);
-                    if (role != null)
-                        user.RoleName = role.Name;
-                    else
-                        user.RoleName = "nincs";
-                }
-
-            }
-            return View(users);
-*/
         }
+
         [Authorize(Roles ="Admin")]
         public async Task<IActionResult> ChangeLibrarianRoleStatus(string email)
         {
@@ -145,6 +120,5 @@ namespace PublicDomainInternetLibrary.Controllers
             // ModelState nem volt valid
             return View(model);
         }
-
     }
 }

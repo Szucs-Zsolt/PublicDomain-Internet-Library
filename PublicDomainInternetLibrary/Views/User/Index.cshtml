@@ -1,4 +1,7 @@
 ﻿@model UserIndexViewModel
+@{
+    ViewData["Title"] = "Felhasználók listája";
+}
 
 <table class="table table-striped border">
     <thead class="table-warning">
@@ -54,7 +57,6 @@
                            asp-route-email="@user.Email"
                            class="btn btn-sm btn-warning">Jelszó megváltoztatása</a>
                     }
-
                 </td>
             </tr>
         }
