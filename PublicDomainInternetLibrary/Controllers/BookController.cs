@@ -132,6 +132,7 @@ namespace PublicDomainInternetLibrary.Controllers
             return View(viewModel);
         }
 
+        [Authorize]
         public IActionResult Download(int id)
         {
             var book = _db.Books.FirstOrDefault(x => x.Id == id);

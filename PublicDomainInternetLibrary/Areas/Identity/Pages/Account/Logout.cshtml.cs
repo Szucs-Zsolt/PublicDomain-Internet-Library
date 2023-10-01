@@ -26,7 +26,7 @@ namespace PublicDomainInternetLibrary.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPost()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToPage("/Home/Index");
+            return RedirectToPage("/Book/Index");
         }
 
   /*      public async Task<IActionResult> OnPost(string returnUrl = null)
